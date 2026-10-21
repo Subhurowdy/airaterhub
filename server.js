@@ -25,10 +25,10 @@ app.use(cors());
 app.use(express.json({ limit: "10kb" }));
 
 const USER_AGENT =
-  "AiraterHubBot/1.1 (+https://airaterhub.com; public-page-analysis)";
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 (compatible; AiraterHubBot/1.1; +https://airaterhub.com)";
 
 const MAX_HTML_BYTES = 2_000_000;
-const REQUEST_TIMEOUT_MS = 12000;
+const REQUEST_TIMEOUT_MS = 20000;
 
 /* -------------------- Basic routes -------------------- */
 
@@ -205,19 +205,14 @@ async function fetchPublicPage(url) {
   try {
     const response = await fetch(url.href, {
       method: "GET",
-      redirect: "manual",
+      redirect: "follow",
       signal: controller.signal,
       headers: {
         "User-Agent": USER_AGENT,
-        Accept: "text/html,application/xhtml+xml;q=0.9"
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9"
       }
     });
-
-    if (response.status >= 300 && response.status < 400) {
-      throw new Error(
-        "This page redirects. Try its final public URL directly."
-      );
-    }
 
     if (!response.ok) {
       throw new Error(`The webpage returned HTTP ${response.status}.`);
