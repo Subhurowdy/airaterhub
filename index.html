@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AiraterHub helps you analyze public content pages and discover optimization opportunities.">
+  <title>AiraterHub — AI Content Intelligence</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">A</div>
+      <div>
+        <h2>AiraterHub</h2>
+        <span>AI Content Intelligence</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="#dashboard" class="nav-item active">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#analyzer" class="nav-item">
+        <i data-lucide="scan-search"></i>
+        <span>Analyze Content</span>
+      </a>
+
+      <a href="#history" class="nav-item">
+        <i data-lucide="history"></i>
+        <span>Analysis History</span>
+      </a>
+
+      <a href="#results" class="nav-item">
+        <i data-lucide="bar-chart-3"></i>
+        <span>Reports</span>
+      </a>
+
+      <div class="nav-title">TOOLS</div>
+
+      <a href="#hashtag-analyzer" class="nav-item">
+        <i data-lucide="hash"></i>
+        <span>Hashtag Analyzer</span>
+      </a>
+
+      <a href="#suggestions" class="nav-item">
+        <i data-lucide="sparkles"></i>
+        <span>AI Suggestions</span>
+      </a>
+
+      <a href="#content-potential" class="nav-item">
+        <i data-lucide="trending-up"></i>
+        <span>Content Potential</span>
+      </a>
+
+      <div class="nav-title">ACCOUNT</div>
+
+      <a href="#profile" class="nav-item">
+        <i data-lucide="user-round"></i>
+        <span>Profile</span>
+      </a>
+
+      <a href="#upgrade" class="nav-item">
+        <i data-lucide="credit-card"></i>
+        <span>Subscription</span>
+      </a>
+
+      <a href="#settings" class="nav-item" id="settingsNav">
+  <i data-lucide="settings"></i>
+  <span>Settings</span>
+</a> </nav>
+
+    <div class="sidebar-bottom">
+      <div class="upgrade-card" id="upgrade">
+        <div class="upgrade-icon">
+          <i data-lucide="crown"></i>
+        </div>
+
+        <strong>Upgrade to Pro</strong>
+        <p>Unlock more analysis tools and advanced insights.</p>
+
+        <button id="upgradeBtn" type="button">
+          Explore Pro
+          <i data-lucide="arrow-up-right"></i>
+        </button>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="avatar">S</div>
+        <div class="user-info">
+          <strong>Subhurowdy</strong>
+          <span>@subhurowdy</span>
+        </div>
+        <button class="more-btn" type="button" aria-label="User menu">
+          <i data-lucide="more-vertical"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main" id="dashboard">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <div class="page-title">
+        <h1>Content Intelligence</h1>
+        <p>Analyze public content and discover opportunities to improve it.</p>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn" id="notificationBtn" type="button" aria-label="Notifications">
+          <i data-lucide="bell"></i>
+          <span class="notification-dot"></span>
+        </button>
+
+        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme">
+          <i data-lucide="sun"></i>
+        </button>
+
+        <div class="profile" id="profile">
+          <div class="avatar">S</div>
+          <div class="profile-text">
+            <strong>Subhurowdy</strong>
+            <span>Free Member</span>
+          </div>
+
+          <i data-lucide="chevron-down"></i>
+
+          <div class="profile-dropdown" id="profileDropdown">
+            <a href="#profile">
+              <i data-lucide="user"></i> Profile
+            </a>
+            <a href="#footer">
+              <i data-lucide="settings"></i> Settings
+            </a>
+            <a href="#upgrade">
+              <i data-lucide="credit-card"></i> Subscription
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <section class="analyzer-card" id="analyzer">
+        <div class="analyzer-header">
+          <div>
+            <div class="section-label">
+              <span class="live-dot"></span>
+              CONTENT ANALYZER
+            </div>
+
+            <h2>Analyze your content</h2>
+            <p>Paste a public webpage URL to inspect its available content and SEO signals.</p>
+          </div>
+
+          <div class="analyzer-status">
+            <i data-lucide="shield-check"></i>
+            Public URL Analysis
+          </div>
+        </div>
+
+        <form id="analyzeForm" class="url-form">
+          <div class="url-input">
+            <i data-lucide="link-2"></i>
+            <input
+              type="url"
+              id="urlInput"
+              name="url"
+              placeholder="https://example.com/article"
+              aria-label="Public webpage URL"
+              autocomplete="url"
+              required
+            >
+
+            <button type="button" class="paste-btn" id="pasteBtn">
+              <i data-lucide="clipboard"></i>
+              Paste
+            </button>
+          </div>
+
+          <button type="submit" class="analyze-btn" id="analyzeBtn">
+            <i data-lucide="scan-line"></i>
+            Analyze Content
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </form>
+
+        <p id="formMessage" role="status" aria-live="polite"></p>
+
+        <div class="supported-platforms">
+          <span>Supported:</span>
+          <div><i data-lucide="instagram"></i> Instagram*</div>
+          <div><i data-lucide="youtube"></i> YouTube*</div>
+          <div><i data-lucide="facebook"></i> Facebook*</div>
+          <div><i data-lucide="globe"></i> Public websites</div>
+        </div>
+
+        <p class="platform-note">
+          *Social platforms may restrict automated page access. Analysis depends on the public HTML available.
+        </p>
+      </section>
+
+      <section class="history-section" id="history">
+        <div class="section-heading">
+          <div>
+            <h2>Analysis History</h2>
+            <p>Your previously analyzed content</p>
+          </div>
+          <button type="button" id="clearHistoryBtn">Clear History</button>
+        </div>
+
+        <div id="historyList">
+          <p id="emptyHistoryMessage">
+            No analysis history yet. Analyze a URL to get started.
+          </p>
+        </div>
+      </section>
+
+      <!-- AIRATERHUB HASHTAG ANALYZER -->
+      <section class="hashtag-tool-section" id="hashtag-analyzer">
+        <div class="hashtag-tool-header">
+          <div>
+            <div class="section-label">AI CONTENT TOOLS</div>
+            <h2>Hashtag Analyzer</h2>
+            <p>Discover hashtag ideas for your content.</p>
+          </div>
+          <span class="hashtag-tool-badge"># Hashtag Studio</span>
+        </div>
+
+        <div class="hashtag-tool-card">
+          <label for="hashtagTopic">Enter topic or hashtags</label>
+          <textarea
+            id="hashtagTopic"
+            rows="4"
+            placeholder="Example: AI tools for students #Technology"
+          ></textarea>
+
+          <label for="hashtagPlatform">Select platform</label>
+          <select id="hashtagPlatform">
+            <option value="instagram">Instagram</option>
+            <option value="youtube">YouTube</option>
+            <option value="facebook">Facebook</option>
+            <option value="x">X (Twitter)</option>
+          </select>
+
+          <button type="button" id="generateHashtagsBtn">
+            Generate Hashtags
+          </button>
+
+          <p id="hashtagToolMessage" role="status"></p>
+        </div>
+
+        <div class="hashtag-tool-results" id="hashtagToolResults" hidden>
+          <div class="hashtag-tool-results-heading">
+            <div>
+              <h3>Your Hashtag Set</h3>
+              <p id="hashtagResultSummary"></p>
+            </div>
+            <button type="button" id="copyHashtagSetBtn">Copy All</button>
+          </div>
+
+          <div class="hashtag-tool-chips" id="hashtagToolChips"></div>
+
+          <p class="hashtag-tool-note">
+            Suggestions are keyword-based, not verified live trend data.
+          </p>
+        </div>
+      </section>
+      <!-- END HASHTAG ANALYZER -->
+
+      <!-- AIRATERHUB CONTENT POTENTIAL -->
+      <section class="hashtag-tool-section" id="content-potential">
+        <div class="hashtag-tool-header">
+          <div>
+            <div class="section-label">AI CONTENT INSIGHTS</div>
+            <h2>Content Potential</h2>
+            <p>Understand the engagement potential of your analyzed content.</p>
+          </div>
+          <span class="hashtag-tool-badge">PRO ANALYTICS</span>
+        </div>
+
+        <div class="hashtag-tool-card" id="contentPotentialCard">
+          <div class="metric-top">
+            <div class="metric-icon blue">
+              <i data-lucide="trending-up"></i>
+            </div>
+            <span class="metric-label">Content Potential Score</span>
+          </div>
+
+          <div class="metric-value">
+            <strong id="contentPotentialScore">—</strong>
+            <span>/100</span>
+          </div>
+
+          <div class="progress">
+            <span id="contentPotentialProgress"></span>
+          </div>
+
+          <p id="contentPotentialDescription">
+            Analyze a URL to view its content potential score.
+          </p>
+
+          <div class="hashtag-pro-lock" id="contentPotentialLock">
+            🔒 Content Potential is a Pro feature. Upgrade to unlock it.
+          </div>
+        </div>
+      </section>
+      <!-- END CONTENT POTENTIAL -->
+
+      <section class="result-section" id="results">
+        <div class="result-heading">
+          <div>
+            <div class="section-label">LATEST ANALYSIS</div>
+            <h2>Content Performance</h2>
+          </div>
+          <span class="analyzed-url" id="analyzedUrl">No analysis yet</span>
+        </div>
+
+        <div class="score-layout">
+          <section class="overall-card">
+            <div class="score-ring" id="scoreRing">
+              <div class="score-center">
+                <span class="score-number" id="overallScore">0</span>
+                <small>/100</small>
+              </div>
+            </div>
+
+            <h3>Overall Score</h3>
+            <p id="scoreMessage">Enter a public URL above to begin.</p>
+
+            <div class="score-confidence">
+              <i data-lucide="activity"></i>
+              <span>Analysis Confidence</span>
+              <strong id="confidence">--%</strong>
+            </div>
+          </section>
+
+          <div class="metrics-grid">
+            <article class="metric-card">
+              <div class="metric-top">
+                <div class="metric-icon purple"><i data-lucide="gem"></i></div>
+                <span class="metric-label">Quality Score</span>
+              </div>
+              <div class="metric-value"><strong data-score="quality">0</strong><span>/100</span></div>
+              <div class="progress"><span data-progress="quality"></span></div>
+              <p>Available content quality signals</p>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top">
+                <div class="metric-icon pink"><i data-lucide="flame"></i></div>
+                <span class="metric-label">Viral Potential</span>
+              </div>
+              <div class="metric-value"><strong data-score="viral">0</strong><span>/100</span></div>
+              <div class="progress"><span data-progress="viral"></span></div>
+              <p>Content engagement indicators</p>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top">
+                <div class="metric-icon blue"><i data-lucide="message-circle"></i></div>
+                <span class="metric-label">Engagement</span>
+              </div>
+              <div class="metric-value"><strong data-score="engagement">0</strong><span>/100</span></div>
+              <div class="progress"><span data-progress="engagement"></span></div>
+              <p>Calls to action and discussion signals</p>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top">
+                <div class="metric-icon green"><i data-lucide="badge-check"></i></div>
+                <span class="metric-label">Trust Score</span>
+              </div>
+              <div class="metric-value"><strong data-score="trust">0</strong><span>/100</span></div>
+              <div class="progress"><span data-progress="trust"></span></div>
+              <p>Basic credibility indicators</p>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top">
+                <div class="metric-icon orange"><i data-lucide="search"></i></div>
+                <span class="metric-label">SEO Score</span>
+              </div>
+              <div class="metric-value"><strong data-score="seo">0</strong><span>/100</span></div>
+              <div class="progress"><span data-progress="seo"></span></div>
+              <p>Metadata and structure indicators</p>
+            </article>
+
+            <article class="metric-card">
+              <div class="metric-top">
+                <div class="metric-icon cyan"><i data-lucide="book-open"></i></div>
+                <span class="metric-label">Readability</span>
+              </div>
+              <div class="metric-value"><strong data-score="readability">0</strong><span>/100</span></div>
+              <div class="progress"><span data-progress="readability"></span></div>
+              <p>Readable text and structure signals</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="lower-grid">
+          <section class="panel pipeline-panel">
+            <div class="panel-header">
+              <div>
+                <h3>Analysis Pipeline</h3>
+                <p>Steps in the analysis process</p>
+              </div>
+              <span class="complete-badge" id="pipelineStatus">Waiting</span>
+            </div>
+
+            <div class="pipeline">
+              <div class="pipeline-item" data-step="content">
+                <div class="pipeline-icon"><i data-lucide="file-text"></i></div>
+                <div class="pipeline-text"><strong>Content Extraction</strong><span>Waiting for URL</span></div>
+                <i class="pipeline-check" data-lucide="circle"></i>
+              </div>
+
+              <div class="pipeline-item" data-step="quality">
+                <div class="pipeline-icon"><i data-lucide="sparkles"></i></div>
+                <div class="pipeline-text"><strong>Quality Analysis</strong><span>Content signals</span></div>
+                <i class="pipeline-check" data-lucide="circle"></i>
+              </div>
+
+              <div class="pipeline-item" data-step="engagement">
+                <div class="pipeline-icon"><i data-lucide="users"></i></div>
+                <div class="pipeline-text"><strong>Engagement Analysis</strong><span>Engagement indicators</span></div>
+                <i class="pipeline-check" data-lucide="circle"></i>
+              </div>
+
+              <div class="pipeline-item" data-step="seo">
+                <div class="pipeline-icon"><i data-lucide="search-check"></i></div>
+                <div class="pipeline-text"><strong>SEO Analysis</strong><span>Metadata and structure</span></div>
+                <i class="pipeline-check" data-lucide="circle"></i>
+              </div>
+
+              <div class="pipeline-item" data-step="final">
+                <div class="pipeline-icon"><i data-lucide="brain"></i></div>
+                <div class="pipeline-text"><strong>Report Generation</strong><span>Preparing the report</span></div>
+                <i class="pipeline-check" data-lucide="circle"></i>
+              </div>
+            </div>
+          </section>
+
+          <!-- FIXED: All suggestion-related cards are inside this section. -->
+          <section class="panel suggestions-panel" id="suggestions">
+
+            <div class="pro-feature" id="missingChecksPro">
+              <div class="pro-feature-icon">
+                <i data-lucide="shield-check"></i>
+              </div>
+              <h3>Missing Checks</h3>
+              <p>Unlock deeper checks and actionable insights for your report.</p>
+              <span class="pro-badge">PRO FEATURE</span>
+            </div>
+
+            <div class="pro-feature" id="pdfExportPro">
+              <div class="pro-feature-icon">
+                <i data-lucide="file-down"></i>
+              </div>
+              <h3>Export Analysis Report</h3>
+              <p>Get a printable report of your analysis.</p>
+
+              <button
+                type="button"
+                class="pro-upgrade-btn"
+                id="pdfExportButton"
+              >
+                <i data-lucide="download"></i>
+                Print / Save as PDF
+              </button>
+
+              <span class="pro-badge">PRO FEATURE</span>
+            </div>
+
+            <div class="panel-header">
+              <div>
+                <h3><i data-lucide="sparkles"></i> Suggestions</h3>
+                <p>Possible improvements for your page</p>
+              </div>
+              <span class="ai-badge">CONTENT INSIGHTS</span>
+            </div>
+
+            <div id="suggestionList">
+              <div class="empty-suggestion">
+                <i data-lucide="lightbulb"></i>
+                <strong>No suggestions yet</strong>
+                <p>Analyze a public webpage to see recommendations.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel hashtag-panel" id="hashtags">
+          <div class="panel-header">
+            <div>
+              <h3><i data-lucide="hash"></i> Recommended Hashtags</h3>
+              <p>Starter tags; these are not verified trend data.</p>
+            </div>
+
+            <button class="copy-all" id="copyHashtags" type="button">
+              <i data-lucide="copy"></i>
+              Copy All
+            </button>
+          </div>
+
+          <div class="hashtags" id="hashtagList">
+            <span class="hashtag">#AiraterHub</span>
+            <span class="hashtag">#ContentAnalysis</span>
+            <span class="hashtag">#ContentCreator</span>
+            <span class="hashtag">#DigitalContent</span>
+          </div>
+        </section>
+
+        <section class="panel page-details">
+          <div class="panel-header">
+            <div>
+              <h3>Page Details</h3>
+              <p>Metadata found on the analyzed page</p>
+            </div>
+          </div>
+
+          <p><strong>Page title:</strong> <span id="pageTitle">Not analyzed yet</span></p>
+          <p><strong>Description:</strong> <span id="pageDescription">Not analyzed yet</span></p>
+          <p><strong>Words detected:</strong> <span id="wordCount">--</span></p>
+          <p><strong>Headings detected:</strong> <span id="headingCount">--</span></p>
+
+          <p id="analysisDisclaimer">
+            Scores are heuristic estimates from accessible public-page signals, not guaranteed predictions.
+          </p>
+        </section>
+      </section>
+    </section>
+
+    
+<footer id="footer">
+  <div class="legal-pages-links">
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms.html">Terms &amp; Conditions</a>
+    <a href="disclaimer.html">Disclaimer</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <span>© 2026 AiraterHub</span>
+  <span>AI Content Intelligence Platform · Created by @subhurowdy</span>
+</footer>
+</main>
+
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <i data-lucide="check-circle"></i>
+    <span id="toastText">Done</span>
+  </div>
+
+  <script src="script1.js"></script>
+</body>
+</html>

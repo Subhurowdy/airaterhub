@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090d18">
+  <title>Analysis Report | AiraterHub</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .report-page {
+      max-width: 1050px;
+      margin: 40px auto;
+      padding: 24px;
+      color: #f4f7ff;
+    }
+
+    .report-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .report-panel {
+      padding: 28px;
+      margin: 18px 0;
+      border: 1px solid rgba(120, 145, 255, .25);
+      border-radius: 20px;
+      background: rgba(19, 27, 48, .8);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, .2);
+    }
+
+    .report-score {
+      font-size: clamp(48px, 8vw, 76px);
+      font-weight: 800;
+      color: #78a7ff;
+      margin: 12px 0;
+    }
+
+    .report-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 14px;
+    }
+
+    .report-metric {
+      padding: 18px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .045);
+    }
+
+    .report-metric strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 26px;
+    }
+
+    .report-list {
+      padding-left: 22px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .report-muted {
+      color: #aab6d0;
+      overflow-wrap: anywhere;
+    }
+
+    .report-action {
+      cursor: pointer;
+      border: 1px solid rgba(120, 145, 255, .4);
+      color: #fff;
+      background: #202d50;
+      padding: 11px 17px;
+      border-radius: 10px;
+      font: inherit;
+    }
+
+    .report-action:hover {
+      background: #304777;
+    }
+
+    #reportStatus {
+      color: #aab6d0;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .report-page { margin: 15px auto; padding: 14px; }
+      .report-panel { padding: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="report-page">
+    <header class="report-top">
+      <div>
+        <p class="report-muted">AIRATERHUB / PRO</p>
+        <h1>Analysis Report</h1>
+        <p class="report-muted">Your content performance overview</p>
+      </div>
+      <button class="report-action" id="backButton" type="button">
+        ← Back to Dashboard
+      </button>
+    </header>
+
+    <section class="report-panel">
+      <p class="report-muted">Analyzed URL</p>
+      <p id="reportUrl">Loading report...</p>
+      <h2 id="reportTitle">Analysis Report</h2>
+      <div class="report-score" id="overallScore">--/100</div>
+      <p id="reportVerdict">Preparing your report...</p>
+      <p class="report-muted" id="reportDescription"></p>
+    </section>
+
+    <section class="report-panel">
+      <h2>Performance Metrics</h2>
+      <div class="report-metrics" id="reportMetrics">
+        <p id="reportStatus">Loading saved report data...</p>
+      </div>
+    </section>
+
+    <section class="report-panel">
+      <h2>AI Suggestions</h2>
+      <ul class="report-list" id="reportSuggestions"></ul>
+    </section>
+
+    <section class="report-panel">
+      <h2>Hashtag Recommendations</h2>
+      <ul class="report-list" id="reportHashtags"></ul>
+    </section>
+
+    <footer class="report-panel report-muted">
+      AiraterHub — Rate. Analyze. Improve.
+      <br>
+      Created with care by <strong>@subhurowdy</strong>
+    </footer>
+  </main>
+
+  
+<script>
+  const API_BASE_URL = "http://localhost:3000";
+
+  const params = new URLSearchParams(window.location.search);
+  const analysisId = params.get("id");
+
+  const reportUrl = document.getElementById("reportUrl");
+  const reportTitle = document.getElementById("reportTitle");
+  const overallScore = document.getElementById("overallScore");
+  const reportVerdict = document.getElementById("reportVerdict");
+  const reportDescription = document.getElementById("reportDescription");
+  const reportMetrics = document.getElementById("reportMetrics");
+  const reportSuggestions = document.getElementById("reportSuggestions");
+  const reportHashtags = document.getElementById("reportHashtags");
+  const reportStatus = document.getElementById("reportStatus");
+
+  document.getElementById("backButton").addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+
+  function addListItems(container, items, emptyMessage) {
+    container.replaceChildren();
+
+    if (!Array.isArray(items) || items.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = emptyMessage;
+      container.appendChild(li);
+      return;
+    }
+
+    items.forEach((item) => {
+      const li = document.createElement("li");
+
+      if (typeof item === "string") {
+        li.textContent = item;
+      } else if (item && typeof item === "object") {
+        li.textContent =
+          item.text || item.title || item.hashtag || JSON.stringify(item);
+      } else {
+        li.textContent = String(item);
+      }
+
+      container.appendChild(li);
+    });
+  }
+
+  async function loadReport() {
+    if (!analysisId || !/^\d+$/.test(analysisId)) {
+      reportStatus.textContent = "A valid report ID is required.";
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/analyses/${encodeURIComponent(analysisId)}`
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success || !data.analysis) {
+        throw new Error(data.error || "Unable to load report.");
+      }
+
+      const analysis = data.analysis;
+      let report = analysis.report;
+
+      if (typeof report === "string") {
+        report = JSON.parse(report);
+      }
+
+      if (report?.report && typeof report.report === "object") {
+        report = report.report;
+      }
+
+      if (report?.data && typeof report.data === "object") {
+        report = report.data;
+      }
+
+      const metrics =
+        report.metrics || report.scores || report.breakdown || {};
+
+      const score = Number(
+        report.overall ??
+        report.overallScore ??
+        report.score ??
+        analysis.overall_score ??
+        0
+      );
+
+      reportUrl.textContent = analysis.url || report.url || "URL unavailable";
+      reportTitle.textContent = report.title || "Content Analysis Report";
+      overallScore.textContent = `${score}/100`;
+      reportVerdict.textContent =
+        score >= 80 ? "Excellent performance" :
+        score >= 60 ? "Good potential for improvement" :
+        "More improvements recommended";
+
+      reportDescription.textContent = report.description || "";
+
+      reportMetrics.replaceChildren();
+
+      const metricNames = {
+        quality: "Content Quality",
+        viral: "Viral Potential",
+        engagement: "Engagement",
+        trust: "Trust",
+        seo: "SEO",
+        readability: "Readability"
+      };
+
+      Object.entries(metricNames).forEach(([key, label]) => {
+        const rawValue = metrics[key];
+        const value = Number(
+          rawValue && typeof rawValue === "object"
+            ? rawValue.score
+            : rawValue
+        );
+
+        if (!Number.isFinite(value)) return;
+
+        const card = document.createElement("div");
+        card.className = "report-metric";
+
+        const name = document.createElement("span");
+        name.textContent = label;
+
+        const number = document.createElement("strong");
+        number.textContent = `${value}/100`;
+
+        card.append(name, number);
+        reportMetrics.appendChild(card);
+      });
+
+      if (!reportMetrics.children.length) {
+        reportMetrics.textContent = "No metric details were saved for this report.";
+      }
+
+      addListItems(
+        reportSuggestions,
+        report.suggestions,
+        "No suggestions were saved for this report."
+      );
+
+      addListItems(
+        reportHashtags,
+        report.hashtags,
+        "No hashtags were saved for this report."
+      );
+
+      reportStatus.textContent = "Report loaded successfully.";
+    } catch (error) {
+      console.error("[AiraterHub Report]", error);
+      reportStatus.textContent =
+        "Could not load this report. Check that the backend is running.";
+    }
+  }
+
+  loadReport();
+</script>
+</body>
+</html>
