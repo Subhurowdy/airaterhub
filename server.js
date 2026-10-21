@@ -120,10 +120,14 @@ function isBlockedIP(ip) {
 }
 
 async function validatePublicUrl(rawUrl) {
+  let trimmed = String(rawUrl || "").trim();
+  if (!/^https?:\/\//i.test(trimmed)) {
+    trimmed = "https://" + trimmed;
+  }
   let url;
 
   try {
-    url = new URL(rawUrl);
+    url = new URL(trimmed);
   } catch {
     throw new Error("Enter a valid webpage URL.");
   }

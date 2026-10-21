@@ -215,13 +215,17 @@ document.addEventListener("click", () => {
 /* ---------- URL validation ---------- */
 
 function validatePublicUrl(rawValue) {
-  const value = String(rawValue || "").trim();
+  let value = String(rawValue || "").trim();
 
   if (!value) {
     return {
       valid: false,
       message: "Please enter a webpage URL."
     };
+  }
+
+  if (!/^https?:\/\//i.test(value)) {
+    value = "https://" + value;
   }
 
   let url;
