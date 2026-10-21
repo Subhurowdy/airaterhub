@@ -7,7 +7,7 @@
    Backend: Node.js / Express
    ========================================== */
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "https://airaterhub-api.onrender.com";
 const API_ANALYZE_URL = `${API_BASE_URL}/analyze`;
 
 const $ = (selector, root = document) => root.querySelector(selector);
